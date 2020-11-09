@@ -24,6 +24,38 @@
 
 \section*{Introduction}
 
+The Hopfield neural network [3] is a type of recurrent neural network that serves as an assosiative memory, which allows its users to retrieve a stored pattern closest to the provided input pattern. The dependence on an input, however, is one of the network's limitations compared to the human brain. The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. In order to emulate this behaviour, Adachi’s Neural Network (AdNN) was proposed in [5] which is a modification of the Hopfield neural network. [1] showed that AdNN is not chaotic and modified it to create M-AdNN, a truly chaotic neural network, which is showed to exihibit periodicity when the input pattern closely resembles one of the stored states.
+
+In the context of pattern recegonition, stored patterns are simply the weights between the neurons that make the network. The weight $w_{ij}$ connects the $i$'the neuron with the $j$'the neuron. The weights are assumed to be symettric in Hopfield-like networks. The input patterns $y$ and the stored patterns $x$, can be viewed as the neurons.
+
+The input pattern $y$ is updated using the following rule,
+
+$$
+\begin{aligned}
+& y_i &&= \Theta\big(\sum_{j \neq i} w_{ij}y_j + b_i \big)\\
+& \Theta(z) &&= \begin{cases}
+  +1, & z > 0.\\
+  -1, & z \le 0.
+  \end{cases}
+\end{aligned}
+$$
+
+where $b_i$ denotes bias of the $i$'th neuron.
+
+The Hopfield neural network minimizes the energy function defined as,
+
+$$
+E = -\sum_{i,j < i} w_{ij}y_i y_j - \sum_{i} b_i y_i
+$$
+
+The energy function can be inferred as the Hamiltonian of system containing dipoles embedded in a dilectric medium. Using the Hebbian learning rule, the weights matrix that minimizes the energy function is,
+
+$$
+w_{ij} = \frac{1}{p} \sum_{s=1}^p x_i^s x_j^s
+$$
+
+where $x^s$ represents the pattern that is to be stored in the network, with $p$ being the number of patterns to be stored.
+
 \section*{Methodology}
 
 \subsection*{Pattern Recognition}
@@ -40,6 +72,10 @@
 \begin{enumerate}[leftmargin=*]
     \item Calitoiu, D., Oommen, B.J. \& Nussbaum, D. Periodicity and stability issues of a chaotic pattern recognition neural network. Pattern Anal Applic 10, 175–188 (2007). https://doi.org/10.1007/s10044-007-0060-3
     \item Darau, Mirela \& Kaslik, Eva \& Balint, Stefan. (2012). Cryptography using chaotic discrete-time delayed Hopfield neural networks. Mathematics in Engineering, Science and Aerospace MESA. 1.
+    \item Hopfield, J.J. Neural networks and physical systems with emergent collective computational abilities.
+    Proc. Natl. Acad. Sci. USA 1982. 79, 2554–2558.
+    \item Freeman WJ (1992) Tutorial in neurobiology: from single neurons to brain chaos. Int J Bifurcat Chaos 2:451–482
+    \item Adachi M, Aihara K (1997) Associative dynamics in a cha- otic neural network. Neural Netw 10:83–98
 \end{enumerate}
 
 \end{document}
