@@ -32,7 +32,7 @@ The input pattern $y$ is updated using the following rule,
 
 $$
 \begin{aligned}
-& y_i &&= \Theta\big(\sum_{j \neq i} w_{ij}y_j + b_i \big)\\
+& y_i(t+1) &&= \Theta\big(\sum_{j \neq i} w_{ij}y_j(t) + b_i \big)\\
 & \Theta(z) &&= \begin{cases}
   +1, & z > 0.\\
   -1, & z \le 0.
@@ -59,6 +59,20 @@ where $x^s$ represents the pattern that is to be stored in the network, with $p$
 \section*{Methodology}
 
 \subsection*{Pattern Recognition}
+
+The M-AdNN [5] provides the model of a chaotic neural network that can juggle between chaos and periodicity, and therefore control the chaos, when it is provided with an input that resonates with one of the stored patterns. It aims to adress another limitation of the Hopfield network that it can get stuck in local minima. The M-AdNN addresses this problem by remaining in a chaotic state when the input pattern does not resonate with any of the stored patterns.
+
+The M-AdNN updates the input pattern $y$ using the rule,
+
+$$
+\begin{aligned}
+& y_i(t+1) &&= f(\eta_i(t+1) + \xi_i(t+1))\\
+& \eta_i(t+1) &&= k_f \eta_N(t) + \sum_{j = 1}^N w_{ij} y_j(t)\\
+& \xi_i(t+1) &&= k_r \xi_N(t) - \alpha y_i(t) + a_i
+\end{aligned}
+$$
+
+Here, $f$ is the logistic function, $f(u) = \frac{1}{1 + e^\frac{-u}{\varepsilon}}$, where $\varepsilon$ is the parameter that controls the steepness. $k_f$ and $k_r$ are constant parameters. $a_i$ is a constant external inputs to the $i$'th neuron.
 
 \subsection*{Cryptography}
 
