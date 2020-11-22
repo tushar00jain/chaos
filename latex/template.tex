@@ -77,6 +77,22 @@ It is showed that M-AdNN is chaotic using analysis of the lyapunov spectrum. The
 
 
 \subsection*{Cryptography}
+In [6] A bifurcation analysis is undertaken for a discrete-time Hopfield neural network of two neurons with two delays, two internal decays and no self-connections, choosing the product of the interconnection coefficients as the characteristic parameter for the system. The stability domain of the null solution is found, the values of the characteristic parameter for which bifurcations occur at the origin are identified, and the existence of Fold/Cusp, Neimark–Sacker and Flip bifurcations is proved. All these bifurcations are analyzed by applying the center manifold theorem and the normal form theory. It is shown that the dynamics in a neighborhood of the null solution become more and more complex as the characteristic parameter grows in magnitude and passes through the bifurcation values. Under certain conditions, it is proved that if the magnitudes of the interconnection coefficients are large enough, the neural network exhibits Marotto’s chaotic behavior.
+
+This work focouses on the following Neural Network
+\[\begin{cases}
+x_{n+1} = a_{1}x_{n} + T_{12}g_{2}(y_{n - k_{2}})\\
+y_{n+1} = a_{2}y_{n} + T_{21}g_{1}(x_{n - k_{1}})
+\end{cases} \forall n \geq \text{max}(k1, k2)\]
+
+In [7] a cryptosystem based on the above system is presented and analyzed. This type of network is utilized to generate binary sequences that are used in permuting each plaintext block, in encrypting it, and in choosing the trajectory of the next iteration. Another novelty of this work is that the trajectory may be switched for every term of the binary sequence, providing a higher degree of randomness. the Authors have based their conclusions on the study of image encryption, for it is known that, due to some inherent features of image, such as bulk data capacity and high correlation among pixels, image encryption is more complex than
+the usual text encryption. The paper describes the class of Hopfield neural networks
+used for encryption-decryption. Presents the proposed encryption algorithm, and shows
+that decryption is completely possible. Then the Authors exemplify this on a particular Hopfield neural network with delays. The security of the system is analyzed, where there is a check on the resistance to statistical and differential attack, Finally the entropy and key are computed for
+security.
+
+Papers [6 7] together create an end to end analysis and implementation of a discrete chaotic cryptosystem with delays. 
+
 
 \section*{Conclusion}
 
@@ -92,6 +108,8 @@ It is showed that M-AdNN is chaotic using analysis of the lyapunov spectrum. The
     Proc. Natl. Acad. Sci. USA 1982. 79, 2554–2558.
     \item Freeman WJ (1992) Tutorial in neurobiology: from single neurons to brain chaos. Int J Bifurcat Chaos 2:451–482
     \item Adachi M, Aihara K (1997) Associative dynamics in a cha- otic neural network. Neural Netw 10:83–98
+    \item Adachi M, Aihara K, et al. “Chaotic Dynamics of a Delayed Discrete-Time Hopfield Network of Two Nonidentical Neurons with&nbsp;No&nbsp;Self-Connections.” Journal of Nonlinear Science, Springer-Verlag, 1 Jan. 1997, link.springer.com/article/10.1007/s00332-007-9015-5. 
+    \item Darau, Mirela, et al. “Cryptography Using Chaotic Discrete-Time Delayed Hopfield Neural Networks.” Journal | MESA, 25 Feb. 2012, nonlinearstudies.com/index.php/mesa/article/view/703. 
 \end{enumerate}
 
 \end{document}
