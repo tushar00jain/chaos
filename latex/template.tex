@@ -24,9 +24,57 @@
 
 \section*{Introduction}
 
+The Hopfield neural network [3] is a type of recurrent neural network that serves as an assosiative memory, which allows its users to retrieve a stored pattern closest to the provided input pattern. The dependence on an input, however, is one of the network's limitations compared to the human brain. The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. In order to emulate this behaviour, Adachi’s Neural Network (AdNN) was proposed in [5] which is a modification of the Hopfield neural network. [1] showed that AdNN is not chaotic and modified it to create M-AdNN, a truly chaotic neural network, which is showed to exihibit periodicity when the input pattern closely resembles one of the stored states.
+
+In the context of pattern recegonition, stored patterns are simply the weights between the neurons that make the network. The weight $w_{ij}$ connects the $i$'the neuron with the $j$'the neuron. The weights are assumed to be symettric in Hopfield-like networks. The input patterns $y$ and the stored patterns $x$, can be viewed as the neurons.
+
+The input pattern $y$ is updated using the following rule,
+
+$$
+\begin{aligned}
+& y_i(t+1) &&= \Theta\big(\sum_{j \neq i} w_{ij}y_j(t) + b_i \big)\\
+& \Theta(z) &&= \begin{cases}
+  +1, & z > 0.\\
+  -1, & z \le 0.
+  \end{cases}
+\end{aligned}
+$$
+
+where $b_i$ denotes bias of the $i$'th neuron.
+
+The Hopfield neural network minimizes the energy function defined as,
+
+$$
+E = -\sum_{i,j < i} w_{ij}y_i y_j - \sum_{i} b_i y_i
+$$
+
+The energy function can be inferred as the Hamiltonian of system containing dipoles embedded in a dilectric medium. Using the Hebbian learning rule, the weights matrix that minimizes the energy function is,
+
+$$
+w_{ij} = \frac{1}{p} \sum_{s=1}^p x_i^s x_j^s
+$$
+
+where $x^s$ represents the pattern that is to be stored in the network, with $p$ being the number of patterns to be stored.
+
 \section*{Methodology}
 
 \subsection*{Pattern Recognition}
+
+The M-AdNN [1] provides the model of a chaotic neural network that can juggle between chaos and periodicity, and therefore control the chaos, when it is provided with an input that resonates with one of the stored patterns. It aims to adress another limitation of the Hopfield network that it can get stuck in local minima. The M-AdNN addresses this problem by remaining in a chaotic state when the input pattern does not resonate with any of the stored patterns.
+
+The M-AdNN updates the input pattern $y$ using the rule,
+
+$$
+\begin{aligned}
+& y_i(t+1) &&= f(\eta_i(t+1) + \xi_i(t+1))\\
+& \eta_i(t+1) &&= k_f \eta_N(t) + \sum_{j = 1}^N w_{ij} y_j(t)\\
+& \xi_i(t+1) &&= k_r \xi_N(t) - \alpha y_i(t) + a_i
+\end{aligned}
+$$
+
+Here, $f$ is the logistic function, $f(u) = \frac{1}{1 + e^\frac{-u}{\varepsilon}}$, where $\varepsilon$ is the parameter that controls the steepness. $k_f$ and $k_r$ are constant parameters. $a_i$ is a constant external input to the $i$'th neuron, which is taken to be $a_i = y_i$, in order to make network more receptive to the input.
+It is showed that M-AdNN is chaotic using analysis of the lyapunov spectrum. The M-AdNN has two positive lyapunov exponents, $N^{\frac{1}{2}}k_f$ and $N^{\frac{1}{2}}k_f$, with the rest of the lyapunov exponents being $-\infty$. Although the system is capable of switching from chaos to periodicity, it has not yet resolved how this transpires within the M-AdNN. Similar to the OGY method, it is possible that the control parameter has already been written in terms of the variable $y$, with the control being applied while the system is chaotic until it settles into a periodic orbit. As a system capable of pattern recognition, it can determined weather the M-AdNN has convered to a periodic orbit by studying the fourier spectrum of the network's output. In case a pattern is recegonised, a spike at the frequency of the periodic orbit would be observed. The periodicity was measured in [1] by determining the distance of the network's output to each of the stored patterns, with the periodicity being the number of steps between each step where the output was observed to be close to the same stored pattern. After a few trasient steps, it was observed that the inputs resonated with only one of the stored pattern. Although possible that the output can resonate with another stored pattern, the authors aruged that they did not observe such behaviour in the 1000 iterations they ran. As such, if it were the case that there was another attractor, it's periodicity will be orders of magnitude higher than relatively lower periodicity observed for the trained pattern initially. The different periodicities of multiple patterns could also distinguish in classification tasks, with the attractor corresponding to a lower periodicity being "useful" while the attractor with higher periodicity being "not useful". An immidiate application of the chaotic pattern recognition could be to OCR (Optical Charachter Recegonition) mechanism. Since, the experiments conducted to recegonise bitmaps of numerals proved to be 100 \% accurate from noisy input patterns, the OCR could succeed even with a relatively noisy background.
+
 
 \subsection*{Cryptography}
 
@@ -40,6 +88,10 @@
 \begin{enumerate}[leftmargin=*]
     \item Calitoiu, D., Oommen, B.J. \& Nussbaum, D. Periodicity and stability issues of a chaotic pattern recognition neural network. Pattern Anal Applic 10, 175–188 (2007). https://doi.org/10.1007/s10044-007-0060-3
     \item Darau, Mirela \& Kaslik, Eva \& Balint, Stefan. (2012). Cryptography using chaotic discrete-time delayed Hopfield neural networks. Mathematics in Engineering, Science and Aerospace MESA. 1.
+    \item Hopfield, J.J. Neural networks and physical systems with emergent collective computational abilities.
+    Proc. Natl. Acad. Sci. USA 1982. 79, 2554–2558.
+    \item Freeman WJ (1992) Tutorial in neurobiology: from single neurons to brain chaos. Int J Bifurcat Chaos 2:451–482
+    \item Adachi M, Aihara K (1997) Associative dynamics in a cha- otic neural network. Neural Netw 10:83–98
 \end{enumerate}
 
 \end{document}
