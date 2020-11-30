@@ -1,4 +1,4 @@
-\documentclass[12pt, letterpaper]{article}
+geditgeditgedit\documentclass[12pt, letterpaper]{article}
 \usepackage{blindtext}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -9,6 +9,9 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{color}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
 
 \DeclareMathOperator*{\argmin}{argmin}
 
@@ -24,9 +27,9 @@
 
 \section*{Introduction}
 
-The Hopfield neural network [3] is a type of recurrent neural network that serves as an assosiative memory, which allows its users to retrieve a stored pattern closest to the provided input pattern. The dependence on an input, however, is one of the network's limitations compared to the human brain. The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. In order to emulate this behaviour, Adachi’s Neural Network (AdNN) was proposed in [5] which is a modification of the Hopfield neural network. [1] showed that AdNN is not chaotic and modified it to create M-AdNN, a truly chaotic neural network, which is showed to exihibit periodicity when the input pattern closely resembles one of the stored states.
+The Hopfield neural network [3] is a type of recurrent neural network that serves as an associative memory, which allows its users to retrieve a stored pattern closest to the provided input pattern. The dependence on an input, however, is one of the network's limitations compared to the human brain. The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. In order to emulate this behaviour, Adachi’s Neural Network (AdNN) was proposed in [5] which is a modification of the Hopfield neural network. [1] showed that AdNN is not chaotic and modified it to create M-AdNN, a truly chaotic neural network, which is showed to exhibit periodicity when the input pattern closely resembles one of the stored states.
 
-In the context of pattern recegonition, stored patterns are simply the weights between the neurons that make the network. The weight $w_{ij}$ connects the $i$'the neuron with the $j$'the neuron. The weights are assumed to be symettric in Hopfield-like networks. The input patterns $y$ and the stored patterns $x$, can be viewed as the neurons.
+In the context of pattern recognition, stored patterns are simply the weights between the neurons that make the network. The weight $w_{ij}$ connects the $i$'the neuron with the $j$'the neuron. The weights are assumed to be symmetric in Hopfield-like networks. The input patterns $y$ and the stored patterns $x$, can be viewed as the neurons.
 
 The input pattern $y$ is updated using the following rule,
 
@@ -48,7 +51,7 @@ $$
 E = -\sum_{i,j < i} w_{ij}y_i y_j - \sum_{i} b_i y_i
 $$
 
-The energy function can be inferred as the Hamiltonian of system containing dipoles embedded in a dilectric medium. Using the Hebbian learning rule, the weights matrix that minimizes the energy function is,
+The energy function can be inferred as the Hamiltonian of system containing dipoles embedded in a dielectric medium. Using the Hebbian learning rule, the weights matrix that minimizes the energy function is,
 
 $$
 w_{ij} = \frac{1}{p} \sum_{s=1}^p x_i^s x_j^s
@@ -60,7 +63,7 @@ where $x^s$ represents the pattern that is to be stored in the network, with $p$
 
 \subsection*{Pattern Recognition}
 
-The M-AdNN [1] provides the model of a chaotic neural network that can juggle between chaos and periodicity, and therefore control the chaos, when it is provided with an input that resonates with one of the stored patterns. It aims to adress another limitation of the Hopfield network that it can get stuck in local minima. The M-AdNN addresses this problem by remaining in a chaotic state when the input pattern does not resonate with any of the stored patterns.
+The M-AdNN [1] provides the model of a chaotic neural network that can juggle between chaos and periodicity, and therefore control the chaos, when it is provided with an input that resonates with one of the stored patterns. It aims to address another limitation of the Hopfield network that it can get stuck in local minima. The M-AdNN addresses this problem by remaining in a chaotic state when the input pattern does not resonate with any of the stored patterns.
 
 The M-AdNN updates the input pattern $y$ using the rule,
 
@@ -72,14 +75,80 @@ $$
 \end{aligned}
 $$
 
-Here, $f$ is the logistic function, $f(u) = \frac{1}{1 + e^\frac{-u}{\varepsilon}}$, where $\varepsilon$ is the parameter that controls the steepness. $k_f$ and $k_r$ are constant parameters. $a_i$ is a constant external input to the $i$'th neuron, which is taken to be $a_i = y_i$, in order to make network more receptive to the input.
-It is showed that M-AdNN is chaotic using analysis of the lyapunov spectrum. The M-AdNN has two positive lyapunov exponents, $N^{\frac{1}{2}}k_f$ and $N^{\frac{1}{2}}k_f$, with the rest of the lyapunov exponents being $-\infty$. Although the system is capable of switching from chaos to periodicity, it has not yet resolved how this transpires within the M-AdNN. Similar to the OGY method, it is possible that the control parameter has already been written in terms of the variable $y$, with the control being applied while the system is chaotic until it settles into a periodic orbit. As a system capable of pattern recognition, it can determined weather the M-AdNN has convered to a periodic orbit by studying the fourier spectrum of the network's output. In case a pattern is recegonised, a spike at the frequency of the periodic orbit would be observed. The periodicity was measured in [1] by determining the distance of the network's output to each of the stored patterns, with the periodicity being the number of steps between each step where the output was observed to be close to the same stored pattern. After a few trasient steps, it was observed that the inputs resonated with only one of the stored pattern. Although possible that the output can resonate with another stored pattern, the authors aruged that they did not observe such behaviour in the 1000 iterations they ran. As such, if it were the case that there was another attractor, it's periodicity will be orders of magnitude higher than relatively lower periodicity observed for the trained pattern initially. The different periodicities of multiple patterns could also distinguish in classification tasks, with the attractor corresponding to a lower periodicity being "useful" while the attractor with higher periodicity being "not useful". An immidiate application of the chaotic pattern recognition could be to OCR (Optical Charachter Recegonition) mechanism. Since, the experiments conducted to recegonise bitmaps of numerals proved to be 100 \% accurate from noisy input patterns, the OCR could succeed even with a relatively noisy background.
+Here, $f$ is the logistic function, $f(u) = \frac{1}{1 + e^\frac{-u}{\varepsilon}}$, where $\varepsilon$ is the parameter that controls the steepness. $k_f$ and $k_r$ are constant parameters. $a_i$ is a constant external input to the $i^{\text{th}}$ neuron, which is taken to be $a_i = y_i$, in order to make network more receptive to the input.
+It is showed that M-AdNN is chaotic using analysis of the lyapunov spectrum. The M-AdNN has two positive lyapunov exponents, $N^{\frac{1}{2}}k_f$ and $N^{\frac{1}{2}}k_f$, with the rest of the lyapunov exponents being $-\infty$. Although the system is capable of switching from chaos to periodicity, it has not yet resolved how this transpires within the M-AdNN. Similar to the OGY method, it is possible that the control parameter has already been written in terms of the variable $y$, with the control being applied while the system is chaotic until it settles into a periodic orbit. As a system capable of pattern recognition, it can determined weather the M-AdNN has converged to a periodic orbit by studying the Fourier spectrum of the network's output. In case a pattern is recognised, a spike at the frequency of the periodic orbit would be observed. The periodicity was measured in [1] by determining the distance of the network's output to each of the stored patterns, with the periodicity being the number of steps between each step where the output was observed to be close to the same stored pattern. After a few transient steps, it was observed that the inputs resonated with only one of the stored pattern. Although possible that the output can resonate with another stored pattern, the authors argued that they did not observe such behaviour in the 1000 iterations they ran. As such, if it were the case that there was another attractor, it's periodicity will be orders of magnitude higher than relatively lower periodicity observed for the trained pattern initially. The different periodicities of multiple patterns could also distinguish in classification tasks, with the attractor corresponding to a lower periodicity being "useful" while the attractor with higher periodicity being "not useful". An immediate application of the chaotic pattern recognition could be to OCR (Optical Character Recognition) mechanism. Since, the experiments conducted to recognise bitmaps of numerals proved to be 100\% accurate from noisy input patterns, the OCR could succeed even with a relatively noisy background.
 
 
 \subsection*{Cryptography}
+In [6] A bifurcation analysis is undertaken for \ref{hopfield network} a discrete-time Hopfield neural network of two neurons with two delays, two internal decays and no self-connections, with the product of the interconnection coefficients as the characteristic parameter for the system. In this paper, The stability domain of the null solution is found, the values of the characteristic parameter for which bifurcations occur at the origin, are identified, and the existence of Fold/Cusp, Neimark–Sacker and Flip bifurcations is proved. All these bifurcations are analyzed by applying the center manifold theorem and the normal form theory. It is shown that the dynamics in a neighborhood of the null solution become more and more complex as the characteristic parameter grows in magnitude and passes through the bifurcation values. Under certain conditions, it is proved that if the magnitudes of the interconnection coefficients are large enough, the neural network exhibits Marotto’s chaotic behavior. The Network Discussed in [ 6 7] has the following general form:
+
+\begin{equation}\label{hopfield network}
+    \begin{cases}
+    x_{n+1} = a_{1}x_{n} + T_{12}g_{2}(y_{n - k_{2}})\\
+    y_{n+1} = a_{2}y_{n} + T_{21}g_{1}(x_{n - k_{1}})
+    \end{cases} \forall n \geq \text{max}(k1, k2)
+\end{equation}
+
+
+In [7] a Cryptosystem based on the above system is presented and analyzed. This network is utilized to generate binary sequences that are used in permuting each plaintext block, in encrypting it, and in choosing the trajectory of the next iteration. Another novelty of this work is that the trajectory may be switched for every term of the binary sequence, providing a higher degree of randomness. the Authors have based their conclusions on the study of image encryption, for it is known that, due to some inherent features of images, such as bulk data capacity and high correlation among pixels, image encryption is more complex than
+the usual text encryption. This paper describes the class of Hopfield neural networks
+used for encryption-decryption. Presents the proposed encryption algorithm, and shows
+that decryption is completely possible. Then the Authors exemplify this on a particular Hopfield neural network with delays. The security of the system is analyzed, where there is a check on the resistance to statistical and differential attack and Finally the entropy and key are computed for
+security. Papers [6 7] together create an end to end analysis and implementation of a discrete chaotic cryptosystem with delays.
+
+In paper [6] the Dynamics of neural networks focuses on three different components: Bifurcation analysis with respect to the characteristic parameter b:
+
+\begin{equation}\label{b defintion}
+b = T_{12}g_{2}(0)^{'} \cdot T_{21}g_{1}(0)^{'}
+\end{equation}
+
+The set of values of b, for which the null solution is asymptotically stable is identified, then those values of b that produce bifurcations at the origin are found, and then analyzed using both, center manifold theorem, and normal form theory. Finally, the paper shows that if the activation functions satisfy specific conditions, and the magnitudes of the connection coefficients \(T_{12}, T_{21}\), are "large enough", the neural network exhibits chaotic behavior near the origin. 
+
+It is not clarified in this paper as to why the product of the interconnection coefficients is the characteristic parameter of the system but there are resources outside this paper that do, which needs to be explored, but for now we just take this as it is. To find the null solution, the system is converted into a standard matrix form without delays in order to compute the Jacobean. Once the Jacobean is computed, the eigenvalues are calculated as the following characteristic equation is formed
+\begin{equation}\label{characteristic equation 1} 
+z^{k_{1} + k_{2}}(z - a_{1})(z - a_{2})  = z^{k}(z - a_{1})(z - a_{2}) - b
+\end{equation}
+note that the parameter b is concatenated onto the characteristic equation, setting the characteristic equation to zero so as to find the eigenvalues we get:
+
+\begin{equation}\label{characteristic equation 2}
+    \text{Char}(\lambda) = P_{a,k}(z) = b
+\end{equation}
+we are then shown that the null solution of \ref{characteristic equation 1} is stable when the parameters for b are in the range:
+
+\begin{equation}\label{Null Solution Stability}
+    b \in D_{S}(a,k) = (b_{a,k}^{1}, b_{a,k}^{0})
+\end{equation}
+
+Taking into consideration the interest in finding the chaotic solution to this hopfield network, we move to section 3 where the paper discusses Marottos Chaos:
+
+\begin{theorem}(Marotto). Suppose that the continuously differentiable function \(f:\mathbb{R}^{n} \rightarrow \mathbb{R}^{n}\) has a snap-back repeller \(z*\), ie:
+\begin{enumerate}
+    \item z* is a fixed point of f;
+    \item all eigenvalues of \(Df(z*)\) exceed 1 in magnitude; 
+    \item there exists a point \(z_{0} \neq z*\) in a repelling neighborhood of \(z*\) such that \(z_M = z*\) and \text{det}\((Df(z_{j}))\) for \(1 \leq j \leq M\), where \(z_{j} = f^{j}(z_{0})\) ( for some integer M )\\
+\end{enumerate}
+then f is chaotic
+\end{theorem}
+
+\begin{lemma} if the following is true:
+\[
+|T_{12}T_{21}| \geq \frac{(1+a_{1})(1 + a_{2})}{|g'_{1}(0)g'_{2}(0)|} + \epsilon = T*
+\]
+then all the eigenvalues have magnitude greater than 1
+\end{lemma}
+
+now that the system is better defined we move to a specific example defined by paper [7]
+
+\[
+    \begin{cases}
+        x_{n+1} = \frac{1}{4}x_{n} + tanh(y_{n - 2})\\
+        y_{n+1} = \frac{3}{4}y_{n} + sin(x_{n - 1})
+    \end{cases}
+\]
+
+Because we already verified in [6] that this particular system is chaotic, we need only implement the encryption algorithm. 
 
 \section*{Conclusion}
-
 
 \section*{References}
 
@@ -92,6 +161,8 @@ It is showed that M-AdNN is chaotic using analysis of the lyapunov spectrum. The
     Proc. Natl. Acad. Sci. USA 1982. 79, 2554–2558.
     \item Freeman WJ (1992) Tutorial in neurobiology: from single neurons to brain chaos. Int J Bifurcat Chaos 2:451–482
     \item Adachi M, Aihara K (1997) Associative dynamics in a cha- otic neural network. Neural Netw 10:83–98
+    \item Adachi M, Aihara K, et al. “Chaotic Dynamics of a Delayed Discrete-Time Hopfield Network of Two Nonidentical Neurons with no self-connections.” Journal of Nonlinear Science, Springer-Verlag, 1 Jan. 1997, link.springer.com/article/10.1007/s00332-007-9015-5. 
+    \item Darau, Mirela, et al. “Cryptography Using Chaotic Discrete-Time Delayed Hopfield Neural Networks.” Journal | MESA, 25 Feb. 2012, nonlinearstudies.com/index.php/mesa/article/view/703. 
 \end{enumerate}
 
 \end{document}
