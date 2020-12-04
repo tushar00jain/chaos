@@ -1,4 +1,4 @@
-geditgeditgedit\documentclass[12pt, letterpaper]{article}
+\documentclass[12pt, letterpaper]{article}
 \usepackage{blindtext}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -18,8 +18,6 @@ geditgeditgedit\documentclass[12pt, letterpaper]{article}
 \title{Chaotic Neural Networks and Its Applications}
 \author{Christian Gould, Tushar Jain}
 \date{}
-
-\pagestyle{empty}
 
 \begin{document}
 
@@ -75,12 +73,27 @@ $$
 \end{aligned}
 $$
 
-Here, $f$ is the logistic function, $f(u) = \frac{1}{1 + e^\frac{-u}{\varepsilon}}$, where $\varepsilon$ is the parameter that controls the steepness. $k_f$ and $k_r$ are constant parameters. $a_i$ is a constant external input to the $i^{\text{th}}$ neuron, which is taken to be $a_i = y_i$, in order to make network more receptive to the input.
-It is showed that M-AdNN is chaotic using analysis of the lyapunov spectrum. The M-AdNN has two positive lyapunov exponents, $N^{\frac{1}{2}}k_f$ and $N^{\frac{1}{2}}k_f$, with the rest of the lyapunov exponents being $-\infty$. Although the system is capable of switching from chaos to periodicity, it has not yet resolved how this transpires within the M-AdNN. Similar to the OGY method, it is possible that the control parameter has already been written in terms of the variable $y$, with the control being applied while the system is chaotic until it settles into a periodic orbit. As a system capable of pattern recognition, it can determined weather the M-AdNN has converged to a periodic orbit by studying the Fourier spectrum of the network's output. In case a pattern is recognised, a spike at the frequency of the periodic orbit would be observed. The periodicity was measured in [1] by determining the distance of the network's output to each of the stored patterns, with the periodicity being the number of steps between each step where the output was observed to be close to the same stored pattern. After a few transient steps, it was observed that the inputs resonated with only one of the stored pattern. Although possible that the output can resonate with another stored pattern, the authors argued that they did not observe such behaviour in the 1000 iterations they ran. As such, if it were the case that there was another attractor, it's periodicity will be orders of magnitude higher than relatively lower periodicity observed for the trained pattern initially. The different periodicities of multiple patterns could also distinguish in classification tasks, with the attractor corresponding to a lower periodicity being "useful" while the attractor with higher periodicity being "not useful". An immediate application of the chaotic pattern recognition could be to OCR (Optical Character Recognition) mechanism. Since, the experiments conducted to recognise bitmaps of numerals proved to be 100\% accurate from noisy input patterns, the OCR could succeed even with a relatively noisy background.
+Here, $f$ is the logistic function, $f(u) = \frac{1}{1 + e^\frac{-u}{\varepsilon}}$, where $\varepsilon$ is the parameter that controls the steepness. The logistic function plays the role of squashing the parameters between $0$ and $1$. $k_f$ and $k_r$ are constant parameters, that have the biological significance of decay with respect to feedback inputs and refractoriness. $a_i$ is a constant external input to the $i^{\text{th}}$ neuron, which is taken to be $a_i = y_i$, in order to make network more receptive to the input. It is showed that M-AdNN is chaotic using analysis of the lyapunov spectrum. The M-AdNN has the Jacobian matrix, starting at the initial point $A$, is of the form
+
+$$
+\begin{aligned}
+& J(A) &&= \begin{pmatrix}
+  [J_{ij}^1] & [J_{ij}^2]\\
+  [J_{ij}^3] & [J_{ij}^4]
+  \end{pmatrix}\\
+& J_{ij}^1(t) &&= \frac{\partial \eta_i(t+1)}{\partial \eta_j(t)}\\
+& J_{ij}^2(t) &&= \frac{\partial \eta_i(t+1)}{\partial \xi_j(t)}\\
+& J_{ij}^3(t) &&= \frac{\partial \xi_i(t+1)}{\partial \eta_j(t)}\\
+& J_{ij}^4(t) &&= \frac{\partial \xi_i(t+1)}{\partial \xi_j(t)}
+\end{aligned}
+$$
+
+
+The lyapunov exponents of the system are given by the natural logarithm of the eigenvalues of the matrix $\Lambda_A := [J(A)J(A)^T]^{\frac{1}{2}}$, which are discovered to be ${\frac{1}{2}}ln(N) + ln(k_f)$ and ${\frac{1}{2}}ln(N) + ln(k_r)$, and the rest of the lyapunov exponents being $-\infty$. Therefore, if either of the finite lyapunov are positive, the system exhibits chaotic behaviour. The Routh–Hurwitz cretiria is used on the continuous analogue of the system in order to derive the sufficient condition for M-AdNN to be unstable. Based on the result, is conjectured that $k_f, k_r > 0$ are the sufficient conditions for M-AdNN to be locally unstable. Although the system is capable of switching from chaos to periodicity, it has not yet resolved how this transpires within the M-AdNN. Although, it appears that $k_f$ and $k_r$ determine the behaviour of the system, it is also discovered that $\alpha$ also plays an important role as a bifurcation parameter [8]. As a system capable of pattern recognition, it can determined weather the M-AdNN has converged to a periodic orbit by studying the Fourier spectrum of the network's output. In case a pattern is recognised, a spike at the frequency of the periodic orbit would be observed. The periodicity was measured in [1] by determining the distance of the network's output to each of the stored patterns, with the periodicity being the number of steps between each step where the output was observed to be close to the same stored pattern. After a few transient steps, it was observed that the inputs resonated with only one of the stored pattern. Although possible that the output can resonate with another stored pattern, the authors argued that they did not observe such behaviour in the 1000 iterations they ran. As such, if it were the case that there was another attractor, it's periodicity will be orders of magnitude higher than relatively lower periodicity observed for the trained pattern initially. The different periodicities of multiple patterns could also distinguish in classification tasks, with the attractor corresponding to a lower periodicity being "useful" while the attractor with higher periodicity being "not useful". An immediate application of the chaotic pattern recognition could be to OCR (Optical Character Recognition) mechanism. Since, the experiments conducted to recognise bitmaps of numerals proved to be 100\% accurate from noisy input patterns, the OCR could succeed even with a relatively noisy background.
 
 
 \subsection*{Cryptography}
-In [6] A bifurcation analysis is undertaken for \ref{hopfield network} a discrete-time Hopfield neural network of two neurons with two delays, two internal decays and no self-connections, with the product of the interconnection coefficients as the characteristic parameter for the system. In this paper, The stability domain of the null solution is found, the values of the characteristic parameter for which bifurcations occur at the origin, are identified, and the existence of Fold/Cusp, Neimark–Sacker and Flip bifurcations is proved. All these bifurcations are analyzed by applying the center manifold theorem and the normal form theory. It is shown that the dynamics in a neighborhood of the null solution become more and more complex as the characteristic parameter grows in magnitude and passes through the bifurcation values. Under certain conditions, it is proved that if the magnitudes of the interconnection coefficients are large enough, the neural network exhibits Marotto’s chaotic behavior. The Network Discussed in [ 6 7] has the following general form:
+In [6] A bifurcation analysis is undertaken for \ref{Null Solution Stability} a discrete-time Hopfield neural network of two neurons with two delays, two internal decays and no self-connections, with the product of the interconnection coefficients as the characteristic parameter for the system. In this paper, The stability domain of the null solution is found, the values of the characteristic parameter for which bifurcations occur at the origin, are identified, and the existence of Fold/Cusp, Neimark–Sacker and Flip bifurcations is proved. All these bifurcations are analyzed by applying the center manifold theorem and the normal form theory. It is shown that the dynamics in a neighborhood of the null solution become more and more complex as the characteristic parameter grows in magnitude and passes through the bifurcation values. Under certain conditions, it is proved that if the magnitudes of the interconnection coefficients are large enough, the neural network exhibits Marotto’s chaotic behavior. The Network Discussed in [ 6 7] has the following general form:
 
 \begin{equation}\label{hopfield network}
     \begin{cases}
@@ -102,10 +115,10 @@ In paper [6] the Dynamics of neural networks focuses on three different componen
 b = T_{12}g_{2}(0)^{'} \cdot T_{21}g_{1}(0)^{'}
 \end{equation}
 
-The set of values of b, for which the null solution is asymptotically stable is identified, then those values of b that produce bifurcations at the origin are found, and then analyzed using both, center manifold theorem, and normal form theory. Finally, the paper shows that if the activation functions satisfy specific conditions, and the magnitudes of the connection coefficients \(T_{12}, T_{21}\), are "large enough", the neural network exhibits chaotic behavior near the origin. 
+The set of values of b, for which the null solution is asymptotically stable is identified, then those values of b that produce bifurcations at the origin are found, and then analyzed using both, center manifold theorem, and normal form theory. Finally, the paper shows that if the activation functions satisfy specific conditions, and the magnitudes of the connection coefficients \(T_{12}, T_{21}\), are "large enough", the neural network exhibits chaotic behavior near the origin.
 
 It is not clarified in this paper as to why the product of the interconnection coefficients is the characteristic parameter of the system but there are resources outside this paper that do, which needs to be explored, but for now we just take this as it is. To find the null solution, the system is converted into a standard matrix form without delays in order to compute the Jacobean. Once the Jacobean is computed, the eigenvalues are calculated as the following characteristic equation is formed
-\begin{equation}\label{characteristic equation 1} 
+\begin{equation}\label{characteristic equation 1}
 z^{k_{1} + k_{2}}(z - a_{1})(z - a_{2})  = z^{k}(z - a_{1})(z - a_{2}) - b
 \end{equation}
 note that the parameter b is concatenated onto the characteristic equation, setting the characteristic equation to zero so as to find the eigenvalues we get:
@@ -113,7 +126,7 @@ note that the parameter b is concatenated onto the characteristic equation, sett
 \begin{equation}\label{characteristic equation 2}
     \text{Char}(\lambda) = P_{a,k}(z) = b
 \end{equation}
-we are then shown that the null solution of \ref{characteristic equation 1} is stable when the parameters for b are in the range:
+we are then shown that the null solution of \ref{characteristic equation 2} is stable when the parameters for b are in the range:
 
 \begin{equation}\label{Null Solution Stability}
     b \in D_{S}(a,k) = (b_{a,k}^{1}, b_{a,k}^{0})
@@ -124,7 +137,7 @@ Taking into consideration the interest in finding the chaotic solution to this h
 \begin{theorem}(Marotto). Suppose that the continuously differentiable function \(f:\mathbb{R}^{n} \rightarrow \mathbb{R}^{n}\) has a snap-back repeller \(z*\), ie:
 \begin{enumerate}
     \item z* is a fixed point of f;
-    \item all eigenvalues of \(Df(z*)\) exceed 1 in magnitude; 
+    \item all eigenvalues of \(Df(z*)\) exceed 1 in magnitude;
     \item there exists a point \(z_{0} \neq z*\) in a repelling neighborhood of \(z*\) such that \(z_M = z*\) and \text{det}\((Df(z_{j}))\) for \(1 \leq j \leq M\), where \(z_{j} = f^{j}(z_{0})\) ( for some integer M )\\
 \end{enumerate}
 then f is chaotic
@@ -146,7 +159,7 @@ now that the system is better defined we move to a specific example defined by p
     \end{cases}
 \]
 
-Because we already verified in [6] that this particular system is chaotic, we need only implement the encryption algorithm. 
+Because we already verified in [6] that this particular system is chaotic, we need only implement the encryption algorithm.
 
 \section*{Conclusion}
 
@@ -161,8 +174,9 @@ Because we already verified in [6] that this particular system is chaotic, we ne
     Proc. Natl. Acad. Sci. USA 1982. 79, 2554–2558.
     \item Freeman WJ (1992) Tutorial in neurobiology: from single neurons to brain chaos. Int J Bifurcat Chaos 2:451–482
     \item Adachi M, Aihara K (1997) Associative dynamics in a cha- otic neural network. Neural Netw 10:83–98
-    \item Adachi M, Aihara K, et al. “Chaotic Dynamics of a Delayed Discrete-Time Hopfield Network of Two Nonidentical Neurons with no self-connections.” Journal of Nonlinear Science, Springer-Verlag, 1 Jan. 1997, link.springer.com/article/10.1007/s00332-007-9015-5. 
-    \item Darau, Mirela, et al. “Cryptography Using Chaotic Discrete-Time Delayed Hopfield Neural Networks.” Journal | MESA, 25 Feb. 2012, nonlinearstudies.com/index.php/mesa/article/view/703. 
+    \item Adachi M, Aihara K, et al. “Chaotic Dynamics of a Delayed Discrete-Time Hopfield Network of Two Nonidentical Neurons with no self-connections.” Journal of Nonlinear Science, Springer-Verlag, 1 Jan. 1997, link.springer.com/article/10.1007/s00332-007-9015-5.
+    \item Darau, Mirela, et al. “Cryptography Using Chaotic Discrete-Time Delayed Hopfield Neural Networks.” Journal | MESA, 25 Feb. 2012, nonlinearstudies.com/index.php/mesa/article/view/703.
+    \item Qin, Ke \& Oommen, B.. (2008). Chaotic Pattern Recognition: The Spectrum of Properties of the Adachi Neural Network.
 \end{enumerate}
 
 \end{document}
