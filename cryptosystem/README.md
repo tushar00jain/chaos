@@ -4,13 +4,17 @@ hello, here are some instructions on how to use the encoder ...
 
 # Before you start!
 be sure that the ChaoticEncoder has executable privledges
-  chmod +x ChaoticEncoder
+```
+$ chmod +x ChaoticEncoder
+```
 
 ## Step 1:
 
 ### a.
 run the encoder
-  ./ChaoticEncoder
+```
+ $ ./ChaoticEncoder
+```
 
 ### b.
 Load an image you want to encode ( smaller is better for now because it's faster )
