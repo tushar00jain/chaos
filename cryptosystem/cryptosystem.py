@@ -2,11 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import struct
-
-
+import sys
+import io
+import cv2
 
 mpl.rcParams['lines.linewidth'] = .2
-
 
 class TwoNodeSystem(object):
     def __init__(self, a1, a2, g1, g2, T1=1, T2=1, Transient_Iterations=None):
@@ -90,13 +90,15 @@ def bit_binary_rep(t, d, e, i):
 
 # TODO optimize with C
 def Count(N, M, turn):
-    INT_BITS=32
     def leftRotate(n, d):
         # In n<<d, last d bits are 0.
         # To put first 3 bits of n at
         # last, do bitwise or of n<<d
         # with n >>(INT_BITS - d)
-        return (n << d)|(n >> (INT_BITS - d))
+        bin_array = np.array([np.binary_repr(N)])
+        shifted_bin_array = np.roll(bin_array, -1*d)
+        left_shifted_int = int("0b"+"".join(x for x in shifted_bin_array),2)
+        return left_shifted_int
 
     # Function to right
     # rotate n by d bits
@@ -106,7 +108,12 @@ def Count(N, M, turn):
         # To put last 3 bits of at
         # first, do bitwise or of n>>d
         # with n <<(INT_BITS - d)
-        return (n >> d)|(n << (INT_BITS - d)) & 0xFFFFFFFF
+
+        bin_array = np.array([np.binary_repr(N)])
+        shifted_bin_array = np.roll(bin_array, d)
+        right_shifted_int = int("0b"+"".join(x for x in shifted_bin_array),2)
+        return right_shifted_int
+
     # Convert N into hexadecimal number and
     # remove the initial zeros in it
     if(turn == 'R'):
@@ -120,27 +127,18 @@ def Count(N, M, turn):
     return S
 
 def SegmentGenerator(Message, num_bytes=4):
-    """
-    takes a string message and breaks off num_bytes chunks
-    """
-    Message = Message.encode("utf-8")
-    Message = np.frombuffer(Message, dtype="S1")
+    '''
+    Take a Byte String and Encode it into Chunks
+    '''
 
-    if len(Message) % num_bytes == 0:
-        output = np.split(Message, len(Message)/num_bytes)
+    while len(Message) != 0:
+        if len(Message) < num_bytes:
+            additions = num_bytes - len(Message)
+            Message = Message + b" "*additions
+        msg = Message[:num_bytes]
+        Message = Message[num_bytes:]
+        yield msg
 
-    else:
-        extra = len(Message) % num_bytes
-        buff  = num_bytes - extra
-
-        extra_bytes = [Message[-1*extra:]]
-        Message = Message[:-1*extra]
-
-        extra_bytes = np.append(extra_bytes, np.array([b' ']*buff, dtype="S1"))
-        Message = np.append(Message,extra_bytes)
-        output = np.split(Message, len(Message)/num_bytes)
-    for val in output:
-        yield b"".join([c for c in val])
 
 def Compute_Binary_Sequence(rnn, first_time_flag=True):
         '''
@@ -149,7 +147,6 @@ def Compute_Binary_Sequence(rnn, first_time_flag=True):
         x_vals, y_vals = rnn.iterate(38)
         A_J = np.zeros(32, dtype=np.int8)
         D_J = np.zeros(5, dtype=np.int8)
-        x_vals, y_vals = my_rnn_pos.iterate(N=38)
         if rnn.prev_bit != 1:
             for k in range(1, 33):
                     A_J[k-1] = bit_binary_rep(x_vals[k-1], -10, 0, i=4)
@@ -176,38 +173,22 @@ def Compute_Binary_Sequence(rnn, first_time_flag=True):
 
         return AJ, DJ, A_J, D_J
 
-def convert(data):
-    with_flag = eval(bin(int(data, 16)))
-    return int.to_bytes(with_flag, 4, 'big')
 
-def unconvert(byte_data):
-    bin_str = bin(int.from_bytes(byte_data, 'big'))
-    flag = bin_str[-1]
-    data = bin_str[:-1]
-    return (hex(eval(data)))
-
-
-if __name__=="__main__":
-
+def decrypt(Message):
     b = -2
-    print("Creating Hopfield Network ...")
     my_rnn_pos = TwoNodeSystem(a1=1/4, a2=3/4, g1=np.sin, g2=np.tanh, T1=1, T2=b)
-    my_rnn_neg = TwoNodeSystem(a1=1/4, a2=3/4, g1=np.sin, g2=np.tanh, T1=1, T2=b)
-    print("Successfully Created Network")
-
-    # From The Paper ( Simple Example w/ Text)
-    Message = input("Please Enter an encodable message:\n>> ")
-    #STEP-1: Iterate the Nerual Network to Transient Pos
     x_N, y_N = my_rnn_pos.iterate(N=10001, x0=.01, x1=.01, x2=.01, y0=.01,y1=.01, y2=.01)
     x0 = x_N[-1:]
 
     #STEP-2: Break the Message into l=4 subsequences
     getChunk = SegmentGenerator(Message, num_bytes=4)
 
-    final_message = ""
+    final_message = b""
+    print("Decrypting")
     for i, chunk in enumerate(getChunk):
         print("iteration {curr}".format(curr=i), end='\r')
-        PJ = chunk
+        Cj = chunk
+        #print("\n",chunk, "LENGTH:", len(chunk))
 
         #STEP-3: Compute the Binary Sequences Supplied by the Fourth bits
 
@@ -215,30 +196,120 @@ if __name__=="__main__":
         #print("LEN:", len(PJ))
 
         AJ, DJ, A_J, D_J = Compute_Binary_Sequence(my_rnn_pos)
-        a1 = int(AJ,2)
-        #p1 = int("0b01100010011101010110011001100110",2)
-        p1 = int.from_bytes(PJ, 'little')
-        #print("PJ:", bin(p1))
-        #print("AJ:", bin(a1))
-        #print("DJ:", DJ)
+        ai = int(AJ,2)
+        Ci = int.from_bytes(Cj, 'little')
+        a1_prime = Count(ai, int(DJ,2), "R")
+        P1 = a1_prime ^ Ci
+        plaintext = Count(P1, int(DJ, 2), "R")
 
-        #print(p1)
-        #print(a1)
+        final_message += int.to_bytes(plaintext, 4, "little")
+    decrypted_message = final_message
+    return decrypted_message
+
+def encrypt(Message):
+    b=-2
+    my_rnn_pos = TwoNodeSystem(a1=1/4, a2=3/4, g1=np.sin, g2=np.tanh, T1=1, T2=b)
+    x_N, y_N = my_rnn_pos.iterate(N=10001, x0=.01, x1=.01, x2=.01, y0=.01,y1=.01, y2=.01)
+    x0 = x_N[-1:]
+
+    #STEP-2: Break the Message into l=4 subsequences
+    getChunk = SegmentGenerator(Message, num_bytes=4)
+
+    final_message = b""
+    print("Encrypting ...")
+    for i, chunk in enumerate(getChunk):
+        print("iteration {curr}".format(curr=i), end='\r')
+        PJ = chunk
+        #print("CHUNK:", chunk ,"LEN:", len(chunk))
+        AJ, DJ, A_J, D_J = Compute_Binary_Sequence(my_rnn_pos)
+        a1 = int(AJ,2)
+        p1 = int.from_bytes(PJ, 'little')
+
+        #print("before")
+        #print("Pj:", bin(p1))
+        #print("Aj:", bin(a1))
 
         p1_prime = Count(p1, int(DJ,2), "L")
         a1_prime = Count(a1, int(DJ,2), "R")
+        #print("after")
+        #print("Pj' Integer:", bin(p1_prime))
+        #print("Aj' Integer:", bin(a1_prime))
 
         cypher = p1_prime ^ a1_prime
+        #print("CYPHER", cypher)
 
-        #print("First Encryption:", cypher)
-        #print("As Bytes:",bin(cypher))
+        #x_N, y_N = my_rnn_pos.iterate(N=38)
+        final_message += int.to_bytes(cypher, 4, "little")
+    encrypted_message = final_message
+    return encrypted_message
 
-        #print("Decrypting ...")
-        P1 = a1_prime ^ cypher
-        plaintext = Count(P1, int(DJ, 2), "R")
+def encrypt_image(PATH_TO_IMAGE, progressbar=None):
+    img = cv2.imread(PATH_TO_IMAGE, 1)
+    #cv2.imshow('',img)
+    shape = img.shape
+    print(shape)
+    if progressbar:
+        progressbar.set_fraction(.25)
+    img2 = img.flatten()
+    upper_bound = img2.shape[0]
+    print(upper_bound)
+    byte_img = img2.tobytes()
+    if progressbar:
+        progressbar.set_fraction(0.70)
+    enc_img = encrypt(byte_img)
+    nparr = np.frombuffer(enc_img, np.uint8)
+    img_np = nparr[:-1].reshape(*shape) # cv2.IMREAD_COLOR in OpenCV 3.1
+    #cv2.imshow("encrypted image", img_np)
+    #cv2.waitKey(0)
+    if progressbar:
+        progressbar.set_fraction(.99)
+    cv2.imwrite(PATH_TO_IMAGE,img_np)
+    return img_np
 
-        #print(int.to_bytes(plaintext, 4, 'little').decode('utf-8'))
+def decrypt_image(PATH_TO_IMAGE, progressbar=None):
+    img = cv2.imread(PATH_TO_IMAGE, 1)
+    #cv2.imshow('',img)
+    shape = img.shape
+    print(shape)
+    if progressbar:
+        progressbar.set_fraction(0.25)
+    img2 = img.flatten()
+    upper_bound = img2.shape[0]
+    byte_img = img2.tobytes()
+    if progressbar:
+        progressbar.set_fraction(0.70)
+    enc_img = decrypt(byte_img)
+    nparr = np.frombuffer(enc_img, np.uint8)
+    img_np = nparr[:upper_bound].reshape(*shape) # cv2.IMREAD_COLOR in OpenCV 3.1
+    #cv2.imshow("decrypted image", img_np)
+    #cv2.waitKey(0)
+    if progressbar:
+        progressbar.set_fraction(.99)
+    cv2.imwrite(PATH_TO_IMAGE,img_np)
+    return img_np
 
-        x_N, y_N = my_rnn_pos.iterate(N=38)
-        final_message += int.to_bytes(plaintext, 4, "little").decode('utf-8')
-    print("\nCompletely Decrypted:",final_message)
+
+
+
+
+
+
+if __name__=="__main__":
+
+    #print("Creating Hopfield Network ...")
+    ##my_rnn_pos = TwoNodeSystem(a1=1/4, a2=3/4, g1=np.sin, g2=np.tanh, T1=1, T2=b)
+    ##my_rnn_neg = TwoNodeSystem(a1=1/4, a2=3/4, g1=np.sin, g2=np.tanh, T1=1, T2=b)
+    #print("Successfully Created Network")
+
+    # From The Paper ( Simple Example w/ Text)
+    #Message = input("Please Enter an encodable message:\n>> ")
+
+    #enc_msg = encrypt(Message.encode('utf-8'))
+    #print("\nCompletely Encrypted:", enc_msg)
+    #dec_msg = decrypt(enc_msg)
+    #print("\nCompletely Decrypted:", dec_msg)
+    enc_img = encrypt_image("fake_profile.png")
+    enc_img = decrypt_image("encrypted_profile.png")
+
+
+
