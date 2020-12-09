@@ -2,20 +2,35 @@
 
 hello, here are some instructions on how to use the encoder ...
 
+# Before you start!
+be sure that the ChaoticEncoder has executable privledges
+```
+$ chmod +x ChaoticEncoder
+```
+
 ## Step 1:
 
+### a.
+run the encoder
+```
+ $ ./ChaoticEncoder
+```
+
+### b.
 Load an image you want to encode ( smaller is better for now because it's faster )
 
-	you can view it if you want
+### c.
+View the image before it is encoded
 
 ## Step 2:
 
-the Chaotic image will overwrite the image you have specified so be sure to choose carefully
-you may loose it to the chaos ....
+Encode your Image!
+
+and wait ...
 
 ## Step 3:
 
-View the image once the encryption is done for the awe
+View the image once the encryption is done for the awe!
 
 ## Step 4:
 
