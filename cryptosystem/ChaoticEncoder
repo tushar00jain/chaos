@@ -19,7 +19,7 @@ class ShowImageWindow(object):
     def __init__(self, image_name):
         self.window = Gtk.Window()
         self.window.add(Gtk.Image.new_from_file(image_name))
-        self.window.set_title("Show Image")
+        self.window.set_title("View Image")
         self.window.set_size_request(300, 200)
         self.window.show_all()
 
