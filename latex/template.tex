@@ -25,11 +25,11 @@
 
 \section*{Introduction}
 
-The Hopfield neural network [3] is a type of recurrent neural network that serves as an associative memory, which allows its users to retrieve a stored pattern closest to the provided input pattern. The dependence on an input, however, is one of the network's limitations compared to the human brain. The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. In order to emulate this behaviour, Adachi’s Neural Network (AdNN) was proposed in [5] which is a modification of the Hopfield neural network. [1] showed that AdNN is not chaotic and modified it to create M-AdNN, a truly chaotic neural network, which is showed to exhibit periodicity when the input pattern closely resembles one of the stored states.
+The Hopfield neural network [3] is a type of recurrent neural network that serves as an associative memory, which allows its users to retrieve a stored pattern closest to the provided input pattern. The dependence on an input, however, is one of the network's limitations compared to the human brain. The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. Modifications to the Hopfield Network that make it chaotic and capable of recalling patterns in the same way have been proposed. One such model, M-AdNN is the focus of this review.
 
-In the context of pattern recognition, stored patterns are simply the weights between the neurons that make the network. The weight $w_{ij}$ connects the $i$'the neuron with the $j$'the neuron. The weights are assumed to be symmetric in Hopfield-like networks. The input patterns $y$ and the stored patterns $x$, can be viewed as the neurons.
+\section*{Methodology}
 
-The input pattern $y$ is updated using the following rule,
+In a Hopfield Network, viewed as associative memmory, the input pattern $y$ is updated using the following rule,
 
 $$
 \begin{aligned}
@@ -49,7 +49,7 @@ $$
 E = -\sum_{i,j < i} w_{ij}y_i y_j - \sum_{i} b_i y_i
 $$
 
-The energy function can be inferred as the Hamiltonian of system containing dipoles embedded in a dielectric medium. Using the Hebbian learning rule, the weights matrix that minimizes the energy function is,
+The weights matrix that minimizes the energy function is,
 
 $$
 w_{ij} = \frac{1}{p} \sum_{s=1}^p x_i^s x_j^s
@@ -57,11 +57,9 @@ $$
 
 where $x^s$ represents the pattern that is to be stored in the network, with $p$ being the number of patterns to be stored.
 
-\section*{Methodology}
-
 \subsection*{Pattern Recognition}
 
-The M-AdNN [1] provides the model of a chaotic neural network that can juggle between chaos and periodicity, and therefore control the chaos, when it is provided with an input that resonates with one of the stored patterns. It aims to address another limitation of the Hopfield network that it can get stuck in local minima. The M-AdNN addresses this problem by remaining in a chaotic state when the input pattern does not resonate with any of the stored patterns.
+In order to emulate the brain's behaviour of recalling patterns from stimuli, Adachi’s Neural Network (AdNN) [5] was proposed. It was that shown that M-AdNN [1] is a truly chaotic neural network, which exhibits periodicity when the input pattern closely resembles one of the stored states. The M-AdNN prevents being attracted to a local minima of the energy function by remaining in a chaotic state when the input pattern does not resonate with any of the stored patterns.
 
 The M-AdNN updates the input pattern $y$ using the rule,
 
@@ -86,7 +84,7 @@ $$
 
 $J_{ij}^1(t) = \frac{\partial \eta_i(t+1)}{\partial \eta_j(t)}, J_{ij}^2(t) = \frac{\partial \eta_i(t+1)}{\partial \xi_j(t)}, J_{ij}^3(t) = \frac{\partial \xi_i(t+1)}{\partial \eta_j(t)}, J_{ij}^4(t) = \frac{\partial \xi_i(t+1)}{\partial \xi_j(t)}$
 
-The lyapunov exponents of the system are given by the natural logarithm of the eigenvalues of the matrix $\Lambda_A := [J(A)J(A)^T]^{\frac{1}{2}}$, which are discovered to be ${\frac{1}{2}}ln(N) + ln(k_f)$ and ${\frac{1}{2}}ln(N) + ln(k_r)$, and the rest of the lyapunov exponents being $-\infty$. Therefore, if either of the finite lyapunov are positive, the system exhibits chaotic behaviour. The Routh–Hurwitz cretiria is used on the continuous analogue of the system in order to derive the sufficient condition for M-AdNN to be unstable. Based on the result, is conjectured that $k_f, k_r > 0$ are the sufficient conditions for M-AdNN to be locally unstable. Although the system is capable of switching from chaos to periodicity, it has not yet resolved how this transpires within the M-AdNN. Although, it appears that $k_f$ and $k_r$ determine the behaviour of the system, it is also discovered that $\alpha$ also plays an important role as a bifurcation parameter [8]. As a system capable of pattern recognition, it can determined weather the M-AdNN has converged to a periodic orbit by studying the Fourier spectrum of the network's output. In case a pattern is recognised, a spike at the frequency of the periodic orbit would be observed. The periodicity was measured in [1] by determining the distance of the network's output to each of the stored patterns, with the periodicity being the number of steps between each step where the output was observed to be close to the same stored pattern. After a few transient steps, it was observed that the inputs resonated with only one of the stored pattern. Although possible that the output can resonate with another stored pattern, the authors argued that they did not observe such behaviour in the 1000 iterations they ran. As such, if it were the case that there was another attractor, it's periodicity will be orders of magnitude higher than relatively lower periodicity observed for the trained pattern initially. The different periodicities of multiple patterns could also distinguish in classification tasks, with the attractor corresponding to a lower periodicity being "useful" while the attractor with higher periodicity being "not useful". An immediate application of the chaotic pattern recognition could be to OCR (Optical Character Recognition) mechanism. Since, the experiments conducted to recognise bitmaps of numerals proved to be 100\% accurate from noisy input patterns, the OCR could succeed even with a relatively noisy background.
+The lyapunov exponents of the system are given by the natural logarithm of the eigenvalues of the matrix $\Lambda_A := [J(A)J(A)^T]^{\frac{1}{2}}$, which are discovered to be ${\frac{1}{2}}ln(N) + ln(k_f)$ and ${\frac{1}{2}}ln(N) + ln(k_r)$, and the rest of the lyapunov exponents being $-\infty$. Therefore, if either of the finite lyapunov are positive, the system exhibits chaotic behaviour. Although, it appears that $k_f$ and $k_r$ determine the behaviour of the system, it is also discovered that $\alpha$ also plays an important role as a bifurcation parameter [8]. As a system capable of pattern recognition, it can determined weather the M-AdNN has converged to a periodic orbit by studying computing the distance from each of the stored patterns. The periodicity was measured to be the number of steps between each step where the output was observed to be close to the same stored pattern. After a few transient steps, it was observed that the inputs resonated with only one of the stored pattern. Although possible that the output can resonate with another stored pattern, the authors argued that they did not observe such behaviour in the 1000 iterations they ran. If it were the case that there was another attractor, its periodicity would be orders of magnitude higher than relatively lower periodicity observed for the trained pattern initially. In such case, the input pattern is classified as the stored pattern with lower periodicity.
 
 
 \subsection*{Cryptography}
@@ -159,6 +157,8 @@ now that the system is better defined we move to a specific example defined by p
 Because we already verified in [6] that this particular system is chaotic, we need only implement the encryption algorithm.
 
 \section*{Conclusion}
+
+An immediate application of the chaotic pattern recognition could be to OCR (Optical Character Recognition) mechanism.
 
 \section*{References}
 
