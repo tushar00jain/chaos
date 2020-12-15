@@ -258,7 +258,7 @@ def encrypt_image(PATH_TO_IMAGE, progressbar=None):
         progressbar.set_fraction(0.70)
     enc_img = encrypt(byte_img)
     nparr = np.frombuffer(enc_img, np.uint8)
-    img_np = nparr[:-1].reshape(*shape) # cv2.IMREAD_COLOR in OpenCV 3.1
+    img_np = nparr[:upper_bound].reshape(*shape) # cv2.IMREAD_COLOR in OpenCV 3.1
     #cv2.imshow("encrypted image", img_np)
     #cv2.waitKey(0)
     if progressbar:
