@@ -27,7 +27,9 @@
 
 \section*{Introduction}
 
-The Hopfield neural network [3] is a type of recurrent neural network that serves as an associative memory, which allows its users to retrieve a stored pattern closest to the provided input pattern. The dependence on an input, however, is one of the network's limitations compared to the human brain. The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. Modifications to the Hopfield Network that make it chaotic and capable of recalling patterns in the same way have been proposed. One such model, M-AdNN is the focus of this review.
+The Hopfield neural network [3] is a type of recurrent neural network that can serve as an associative memory. This enables users to retrieve a stored patterns from the network after iteration, close to the provided input pattern. The Hopfield network is also capable of producing strings of binary data given input, and a threshold function. This capability can drive the network to utilities in production of binary sequences for cryptography. In Cryptography and associative pattern recognition, the Hopfeild network is dependent on it's input. In Cryptography this might be considered the keyspace of the network. Changes here, can lead to differences in periodicity, symmetry, and thereby can increase or decrease the resulting entropy in the encryption scheme. In image recognition too, dependence on an input is one of the network's limitations, especially when compared to the human brain in similar tasks.  The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. Chaotic Hopfield networks have also shown to create flat cyphertext, and shown to overcome the weaknesses of similar chaotic cryptography schemes.  
+
+In the following, modifications to the Hopfield Network that make it chaotic and capable of recalling patterns in the same way as the human have been proposed. Modifications to the Hopfield Neural network that make it chaotic and capable of creating a high entropy encryption scheme is also proposed. The former, and first model, M-AdNN is the focus of the first part of this review.  The latter, and second model,  will be the focus of the last part. 
 
 \section*{Methodology}
 
@@ -73,7 +75,7 @@ $$
 \end{aligned}
 $$
 
-Here, $f$ is the logistic function, $f(u) = \frac{1}{1 + e^\frac{-u}{\varepsilon}}$, where $\varepsilon$ is the parameter that controls the steepness. The logistic function plays the role of squashing the parameters between $0$ and $1$. $k_f$ and $k_r$ are constant parameters, that have the biological significance of decay with respect to feedback inputs and refractoriness. $a_i$ is a constant external input to the $i^{\text{th}}$ neuron, which is taken to be $a_i = y_i$, in order to make network more receptive to the input. It is showed that M-AdNN is chaotic using analysis of the lyapunov spectrum. The M-AdNN has the Jacobian matrix, starting at the initial point $A$, is of the form
+Here, $f$ is the logistic function, $f(u) = \frac{1}{1 + e^\frac{-u}{\varepsilon}}$, where $\varepsilon$ is the parameter that controls the steepness. The logistic function plays the role of squashing the parameters between $0$ and $1$. $k_f$ and $k_r$ are constant parameters, that have the biological significance of decay with respect to feedback inputs and refractoriness. $a_i$ is a constant external input to the $i^{\text{th}}$ neuron, which is taken to be $a_i = y_i$, in order to make network more receptive to the input. It is shown that M-AdNN is chaotic using analysis of the lyapunov spectrum. The M-AdNN has the Jacobian matrix, starting at the initial point $A$, is of the form
 
 $$
 \begin{aligned}
@@ -90,8 +92,7 @@ The lyapunov exponents of the system are given by the natural logarithm of the e
 
 
 \subsection*{Cryptography}
-In [6] A bifurcation analysis is undertaken for \ref{Null Solution Stability} a discrete-time Hopfield neural network of two neurons with two delays, two internal decays and no self-connections, with the product of the interconnection coefficients as the characteristic parameter for the system. In this paper, The stability domain of the null solution is found, the values of the characteristic parameter for which bifurcations occur at the origin, are identified, and the existence of Fold/Cusp, Neimark–Sacker and Flip bifurcations is proved. All these bifurcations are analyzed by applying the center manifold theorem and the normal form theory. It is shown that the dynamics in a neighborhood of the null solution become more and more complex as the characteristic parameter grows in magnitude and passes through the bifurcation values. Under certain conditions, it is proved that if the magnitudes of the interconnection coefficients are large enough, the neural network exhibits Marotto’s chaotic behavior. The Network Discussed in [ 6 7] has the following general form:
-
+We begin by considering [7] which discusses the following discrete hopfield neural network of two neurons with two delays and two decays.
 \begin{equation}\label{hopfield network}
     \begin{cases}
     x_{n+1} = a_{1}x_{n} + T_{12}g_{2}(y_{n - k_{2}})\\
@@ -99,68 +100,47 @@ In [6] A bifurcation analysis is undertaken for \ref{Null Solution Stability} a 
     \end{cases} \forall n \geq \text{max}(k1, k2)
 \end{equation}
 
-
-In [7] a Cryptosystem based on the above system is presented and analyzed. This network is utilized to generate binary sequences that are used in permuting each plaintext block, in encrypting it, and in choosing the trajectory of the next iteration. Another novelty of this work is that the trajectory may be switched for every term of the binary sequence, providing a higher degree of randomness. the Authors have based their conclusions on the study of image encryption, for it is known that, due to some inherent features of images, such as bulk data capacity and high correlation among pixels, image encryption is more complex than
-the usual text encryption. This paper describes the class of Hopfield neural networks
-used for encryption-decryption. Presents the proposed encryption algorithm, and shows
-that decryption is completely possible. Then the Authors exemplify this on a particular Hopfield neural network with delays. The security of the system is analyzed, where there is a check on the resistance to statistical and differential attack and Finally the entropy and key are computed for
-security. Papers [6 7] together create an end to end analysis and implementation of a discrete chaotic cryptosystem with delays.
-
-In paper [6] the Dynamics of neural networks focuses on three different components: Bifurcation analysis with respect to the characteristic parameter b:
+The paper [6] shows that if the activation functions \((g_{1}, g_{2})\) satisfy specific conditions, and the magnitudes of the connection coefficients \(T_{12}, T_{21}\), are "large enough", the neural network exhibits chaotic behavior near that fixed point.
 
 \begin{equation}\label{b defintion}
 b = T_{12}g_{2}(0)^{'} \cdot T_{21}g_{1}(0)^{'}
 \end{equation}
 
-The set of values of b, for which the null solution is asymptotically stable is identified, then those values of b that produce bifurcations at the origin are found, and then analyzed using both, center manifold theorem, and normal form theory. Finally, the paper shows that if the activation functions satisfy specific conditions, and the magnitudes of the connection coefficients \(T_{12}, T_{21}\), are "large enough", the neural network exhibits chaotic behavior near the origin.
+The initial conditions of the network, \((a_1, a_2, g_1, g_2, T_{12}, T_{21}, N_{0})\) is the key-space of the cryptography scheme. Where The values a1, and a2 are the decays, and \(N_{0}\) is the Transient Number of iterations the Neural network goes through before beginning encryption. Finally the parameter b is the characteristic parameter of the system which will be shown to vary. The paper gives us the following specific example:
 
-It is not clarified in this paper as to why the product of the interconnection coefficients is the characteristic parameter of the system but there are resources outside this paper that do, which needs to be explored, but for now we just take this as it is. To find the null solution, the system is converted into a standard matrix form without delays in order to compute the Jacobean. Once the Jacobean is computed, the eigenvalues are calculated as the following characteristic equation is formed
-\begin{equation}\label{characteristic equation 1}
-z^{k_{1} + k_{2}}(z - a_{1})(z - a_{2})  = z^{k}(z - a_{1})(z - a_{2}) - b
-\end{equation}
-note that the parameter b is concatenated onto the characteristic equation, setting the characteristic equation to zero so as to find the eigenvalues we get:
-
-\begin{equation}\label{characteristic equation 2}
-    \text{Char}(\lambda) = P_{a,k}(z) = b
-\end{equation}
-we are then shown that the null solution of \ref{characteristic equation 2} is stable when the parameters for b are in the range:
-
-\begin{equation}\label{Null Solution Stability}
-    b \in D_{S}(a,k) = (b_{a,k}^{1}, b_{a,k}^{0})
-\end{equation}
-
-Taking into consideration the interest in finding the chaotic solution to this hopfield network, we move to section 3 where the paper discusses Marottos Chaos:
-
-\begin{theorem}(Marotto). Suppose that the continuously differentiable function \(f:\mathbb{R}^{n} \rightarrow \mathbb{R}^{n}\) has a snap-back repeller \(z*\), ie:
-\begin{enumerate}
-    \item z* is a fixed point of f;
-    \item all eigenvalues of \(Df(z*)\) exceed 1 in magnitude;
-    \item there exists a point \(z_{0} \neq z*\) in a repelling neighborhood of \(z*\) such that \(z_M = z*\) and \text{det}\((Df(z_{j}))\) for \(1 \leq j \leq M\), where \(z_{j} = f^{j}(z_{0})\) ( for some integer M )\\
-\end{enumerate}
-then f is chaotic
-\end{theorem}
-
-\begin{lemma} if the following is true:
-\[
-|T_{12}T_{21}| \geq \frac{(1+a_{1})(1 + a_{2})}{|g'_{1}(0)g'_{2}(0)|} + \epsilon = T*
-\]
-then all the eigenvalues have magnitude greater than 1
-\end{lemma}
-
-now that the system is better defined we move to a specific example defined by paper [7]
-
-\[
+\begin{equation}\label{hopfield network}
     \begin{cases}
-        x_{n+1} = \frac{1}{4}x_{n} + tanh(y_{n - 2})\\
-        y_{n+1} = \frac{3}{4}y_{n} + sin(x_{n - 1})
-    \end{cases}
+    x_{n+1} = \frac{1}{4}x_{n} + \sin(y_{n} - 2)\\
+    y_{n+1} = \frac{3}{4}y_{n} + b\tanh(x_{n} - 1))
+    \end{cases} \forall n \geq 2
+\end{equation}
+
+we note that effectively normalizes the node data \(t_{k}\) between zero and one. Where the following applies to \(t \in (t_{0}, t_{k})\)
+\[\frac{t - d}{e -d} = 0.b_{1}b_{2}b_{3}\dots\]
+
+Note that the above is for the output of any of the two nodes, while the purpose as described by the paper is to switch between nodes.  
+Using the following Series, and threshold function, we can represent any \(b_{i}(t)\) as follows
+\[b_{i}(t) = \sum_{r=1}^{2^{i} - 1}(-1)^{r-1}\Theta_{(e - d)(r/2^{i}) + d}(t)\]
+
+\[\Theta_\tau
+\begin{cases}
+0, t < \tau \\
+1, t \geq \tau
+\end{cases}
 \]
 
-Because we already verified in [6] that this particular system is chaotic, we need only implement the encryption algorithm.
+Using the above, we take the following steps to complete the algorithm
+\begin{enumerate}
+    \item take the plaintext message and divide it into chunks of length 4 bytes. 
+    \item having iterated 38 times take 32 bytes and produce a Integer \(A_{j}\)
+    \item Take the remaining 6 bytes and take 5 for an integer \(D_j\) and 1 for determining the next trajectory (x or y)
+    \item Using the plain-text \(P_j\) created earlier, we permute both \(P_j\) and \(A_j\) by \(D_j\). Then finally xor \(P_J\) and \(A_J\)
+\end{enumerate}
+
 
 \section*{Conclusion}
 
-An immediate application of the chaotic pattern recognition could be to OCR (Optical Character Recognition) mechanism.
+We showed that modifications to the Hopfield Network that make it chaotic and capable of recalling patterns in similar ways as the human brain.  We also showed modifications to the Hopfield Neural network that makes it chaotic, and capable of creating a high entropy encryption scheme. These two systems together are Examples of the applications of Chaotic Hopfield Neural Networks. Further study that includes both areas might include a layered encryption scheme that encrypts a unrecognizable image, only recognizable through decryption then iteration via the M-AdNN. Further study might also include using a greater number of nodes in order to determine the recognition value at greater scale, or in the encryption case, attempting to encode sound and video at speed, using FPGA's or other dedicated hardware as well as a analysis of it's entropy when compared to a quantum brute force algorithm. 
 
 \section*{References}
 
