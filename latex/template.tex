@@ -27,7 +27,7 @@
 
 \section*{Introduction}
 
-The Hopfield neural network [3] is a type of recurrent neural network that can serve as an associative memory. This enables users to retrieve a stored patterns from the network after iteration, close to the provided input pattern. The Hopfield network is also capable of producing strings of binary data given input, and a threshold function. This capability can drive the network to utilities in production of binary sequences for cryptography. In Cryptography and associative pattern recognition, the Hopfeild network is dependent on it's input. In Cryptography this might be considered the keyspace of the network. Changes here, can lead to differences in periodicity, symmetry, and thereby can increase or decrease the resulting entropy in the encryption scheme. In image recognition too, dependence on an input is one of the network's limitations, especially when compared to the human brain in similar tasks.  The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. Chaotic Hopfield networks have also shown to create flat cyphertext, and shown to overcome the weaknesses of similar chaotic cryptography schemes.  
+The Hopfield neural network [3] is a type of recurrent neural network that can serve as an associative memory. This enables users to retrieve a stored patterns from the network after iteration, close to the provided input pattern. The Hopfield network is also capable of producing strings of binary data given input, and a threshold function. This capability can drive the network to utilities in production of binary sequences for cryptography. In Cryptography and associative pattern recognition, the Hopfeild network is dependent on its input. In Cryptography this might be considered the keyspace of the network. Changes here, can lead to differences in periodicity, symmetry, and thereby can increase or decrease the resulting entropy in the encryption scheme. In image recognition too, dependence on an input is one of the network's limitations, especially when compared to the human brain in similar tasks.  The brain is capable of transitioning from one state to another even in the lack of an external stimulus. Unlike the Hopfield neural network, the brain does not get stuck in the state of the last pattern that was recalled. It was conjectured in [4] that the brain is able to do so because it is innately chaotic but transitions to a periodic behaviour when it focuses on stimuli, thereby recalling stored memories. Chaotic Hopfield networks have also shown to create flat cyphertext, and shown to overcome the weaknesses of similar chaotic cryptography schemes.  
 
 In the following, modifications to the Hopfield Network that make it chaotic and capable of recalling patterns in the same way as the human have been proposed. Modifications to the Hopfield Neural network that make it chaotic and capable of creating a high entropy encryption scheme is also proposed. The former, and first model, M-AdNN is the focus of the first part of this review.  The latter, and second model,  will be the focus of the last part. 
 
@@ -106,7 +106,7 @@ The paper [6] shows that if the activation functions \((g_{1}, g_{2})\) satisfy 
 b = T_{12}g_{2}(0)^{'} \cdot T_{21}g_{1}(0)^{'}
 \end{equation}
 
-The initial conditions of the network, \((a_1, a_2, g_1, g_2, T_{12}, T_{21}, N_{0})\) is the key-space of the cryptography scheme. Where The values a1, and a2 are the decays, and \(N_{0}\) is the Transient Number of iterations the Neural network goes through before beginning encryption. Finally the parameter b is the characteristic parameter of the system which will be shown to vary. The paper gives us the following specific example:
+The initial conditions of the network, \((a_1, a_2, g_1, g_2, T_{12}, T_{21}, N_{0})\) is the key-space of the cryptography scheme. Where The values \(a_1\), and \(a_2\) are the decays, and \(N_{0}\) is the Transient Number iterations of the Neural network. Finally the parameter b is the characteristic parameter of the system which determines our bifurcations. The paper gives us the following specific example:
 
 \begin{equation}\label{hopfield network}
     \begin{cases}
@@ -115,8 +115,9 @@ The initial conditions of the network, \((a_1, a_2, g_1, g_2, T_{12}, T_{21}, N_
     \end{cases} \forall n \geq 2
 \end{equation}
 
-we note that effectively normalizes the node data \(t_{k}\) between zero and one. Where the following applies to \(t \in (t_{0}, t_{k})\)
-\[\frac{t - d}{e -d} = 0.b_{1}b_{2}b_{3}\dots\]
+\subsection*{Encryption Scheme}
+First, we normalize the node data \(t_{k}\) between zero and one. Where the following applies to \(t \in (t_{0}, t_{k})\)
+\[\frac{t_{k} - d}{e -d} = 0.b_{1}b_{2}b_{3}\dots\]
 
 Note that the above is for the output of any of the two nodes, while the purpose as described by the paper is to switch between nodes.  
 Using the following Series, and threshold function, we can represent any \(b_{i}(t)\) as follows
@@ -134,13 +135,20 @@ Using the above, we take the following steps to complete the algorithm
     \item take the plaintext message and divide it into chunks of length 4 bytes. 
     \item having iterated 38 times take 32 bytes and produce a Integer \(A_{j}\)
     \item Take the remaining 6 bytes and take 5 for an integer \(D_j\) and 1 for determining the next trajectory (x or y)
-    \item Using the plain-text \(P_j\) created earlier, we permute both \(P_j\) and \(A_j\) by \(D_j\). Then finally xor \(P_J\) and \(A_J\)
+    \item Using the plain-text \(P_j\) created earlier, we permute both \(P_j\) and \(A_j\) by \(D_j\) giving \(P'_{j}\) and \(A'_{j}\). Then finally xor \(P'_j\) and \(A'_j\)
 \end{enumerate}
+\subsection*{Security Analysis}
+\subsubsection*{Statistical Attack ( periodic/"pattern" attack )}
+In the Paper the authors discuss the Approximately random histogram distribution of correlation between cipher-text and plain-text. The Flatness of the curve indicates the algorithms strong resistance to statistical attack. Between adjacent pixel pairs it is shown that the sequences are highly independent of one another.
+\subsubsection*{Differential Attack ( "difference from original" attack) }
+By checking the gradient of pixels of the original image to surrounding pixels in the ciphered image, it is shown that for the case used by the authors, there was a more than 98\% difference between the original pixel and the cipher pixels. Showing the System to be strong against differential attack as well in this instance. 
+\subsubsection*{Security Key Analysis}
+The Hopfield network is considered to have highly sensitive keys with respect to it's initial condition. The Authors also note, that a secure cryptosystem requires a large key space. Using the example (3) we note that the available combination of initial conditions and activation functions,  can be considered infinitely large, and therefore has secure keys
 
 
 \section*{Conclusion}
 
-We showed that modifications to the Hopfield Network that make it chaotic and capable of recalling patterns in similar ways as the human brain.  We also showed modifications to the Hopfield Neural network that makes it chaotic, and capable of creating a high entropy encryption scheme. These two systems together are Examples of the applications of Chaotic Hopfield Neural Networks. Further study that includes both areas might include a layered encryption scheme that encrypts a unrecognizable image, only recognizable through decryption then iteration via the M-AdNN. Further study might also include using a greater number of nodes in order to determine the recognition value at greater scale, or in the encryption case, attempting to encode sound and video at speed, using FPGA's or other dedicated hardware as well as a analysis of it's entropy when compared to a quantum brute force algorithm. 
+We have shown that modifications to the Hopfield Network that make it chaotic and capable of recalling patterns in similar ways as the human brain.  We also showed modifications to the Hopfield Neural network that makes it chaotic, and capable of creating a high entropy encryption scheme. These two systems together are Examples of the applications of Chaotic Hopfield Neural Networks. Further study that includes both areas might include a layered encryption scheme that encrypts a unrecognizable image, only recognizable through decryption then iteration via the M-AdNN. Further study might also include using a greater number of nodes in order to determine the recognition value at greater scale, or in the encryption case, attempting to encode sound and video at speed, using FPGA's or other dedicated hardware as well as a analysis of its entropy when compared to a quantum brute force algorithm. 
 
 \section*{References}
 
