@@ -101,13 +101,13 @@ We begin by considering [7] which discusses the following discrete Hopfield neur
     \end{cases} \forall n \geq \text{max}(k1, k2)
 \end{equation}
 
-The paper [6] shows that if the activation functions \((g_{1}, g_{2})\) satisfy specific conditions, and the magnitudes of the connection coefficients \(T_{12}, T_{21}\), are "large enough", the neural network exhibits chaotic behavior near that fixed point.
+The paper [6] shows that if the activation functions \((g_{1}, g_{2})\) satisfy specific conditions. When the magnitudes of the connection coefficients \(T_{12}, T_{21}\), are "large enough", the neural network exhibits chaotic behavior near that fixed point.
 
 \begin{equation}\label{b defintion}
 b = T_{12}g_{2}(0)^{'} \cdot T_{21}g_{1}(0)^{'}
 \end{equation}
 
-The initial conditions of the network, \((a_1, a_2, g_1, g_2, T_{12}, T_{21}, N_{0})\) is the key-space of the cryptography scheme. Where The values \(a_1\), and \(a_2\) are the decays, and \(N_{0}\) is the Transient Number iterations of the Neural network. Finally the parameter b is the characteristic parameter of the system which determines our bifurcations. The paper gives us the following specific example:
+The initial conditions of the network, \((a_1, a_2, g_1, g_2, T_{12}, T_{21}, N_{0})\) is the key-space of the cryptography scheme. Where The values \(a_1\), and \(a_2\) are the decays, and \(N_{0}\) is the Transient Number iterations of the Neural network. Finally the parameter \textit{b} is the characteristic parameter of the system which determines our bifurcations. The paper gives us the following specific example:
 
 \begin{equation}\label{hopfield network}
     \begin{cases}
@@ -133,18 +133,18 @@ Using the following Series, and threshold function, we can represent any \(b_{i}
 
 Using the above, we take the following steps to complete the algorithm
 \begin{enumerate}
-    \item take the plaintext message and divide it into chunks of length 4 bytes.
-    \item having iterated 38 times take 32 bytes and produce a Integer \(A_{j}\)
+    \item Take the plaintext message and divide it into chunks of length 4 bytes.
+    \item Having iterated 38 times; take 32 bytes and produce a Integer \(A_{j}\)
     \item Take the remaining 6 bytes and take 5 for an integer \(D_j\) and 1 for determining the next trajectory (x or y)
     \item Using the plain-text \(P_j\) created earlier, we permute both \(P_j\) and \(A_j\) by \(D_j\) giving \(P'_{j}\) and \(A'_{j}\). Then finally xor \(P'_j\) and \(A'_j\)
 \end{enumerate}
 \subsection*{Security Analysis}
 \subsubsection*{Statistical Attack ( periodic/"pattern" attack )}
-In the Paper the authors discuss the Approximately random histogram distribution of correlation between cipher-text and plain-text. The Flatness of the curve indicates the algorithms strong resistance to statistical attack. Between adjacent pixel pairs it is shown that the sequences are highly independent of one another.
+In the Paper the authors discuss the approximately random histogram distribution of correlation between cipher-text and plain-text. The flatness of the curve indicates the algorithm's strong resistance to statistical attack. Between adjacent pixel pairs it is shown, that the sequences are highly independent of one another.
 \subsubsection*{Differential Attack ( "difference from original" attack) }
-By checking the gradient of pixels of the original image to surrounding pixels in the ciphered image, it is shown that for the case used by the authors, there was a more than 98\% difference between the original pixel and the cipher pixels. Showing the System to be strong against differential attack as well in this instance.
+By comparing the gradients of pixels of the original image to their surrounding pixels in the ciphered image, it is shown that there was a more than 98\% difference between the original pixel and the cipher pixels. Showing the System to be strong against differential attack.
 \subsubsection*{Security Key Analysis}
-The Hopfield network is considered to have highly sensitive keys with respect to it's initial condition. The Authors also note, that a secure crypto-system requires a large key space. Using the example (3) we note that the available combination of initial conditions and activation functions,  can be considered infinitely large, and therefore has secure keys
+The Hopfield network is considered to have highly sensitive keys with respect to it's initial condition. The authors also note, that a secure cryptosystem requires a large key space. Using the example (3) we note that the available combination of initial conditions and activation functions,  can be considered infinitely large, and thereby increases the usability, and security of the key-space, and ultimately the cryptosystem. 
 
 
 \section*{Conclusion}
