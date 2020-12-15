@@ -30,7 +30,7 @@
 
 \section*{Introduction}
 
-The Hopfield neural network [3] is a type of recurrent neural network that acts as an associative memory, that enables storage of patterns which can be retrived using an iteration scheme starting from a user provided input pattern. The Hopfield network is also capable of producing strings of binary data given input, and a threshold function. This capability can drive the network to utilities in production of binary sequences for cryptography. First, a modified Hopfield Network, M-AdNN, that make it chaotic and capable of recalling patterns in the same way as the human have been reviewed. Then lastly, a modification to the Hopfield Neural network that makes it chaotic and capable of creating a high entropy encryption scheme is also reviewed.
+The Hopfield neural network [3] is a type of recurrent neural network that acts as an associative memory, that enables storage of patterns which can be retrieved using an iteration scheme starting from a user provided input pattern. The Hopfield network is also capable of producing strings of binary data given input, and a threshold function. This capability can drive the network to utilities in production of binary sequences for cryptography. First, a modified Hopfield Network, M-AdNN, that make it chaotic and capable of recalling patterns in the same way as the human have been reviewed. Then lastly, a modification to the Hopfield Neural network that makes it chaotic and capable of creating a high entropy encryption scheme is also reviewed.
 
 \section*{Methodology}
 
@@ -64,7 +64,7 @@ where $x^s$ represents the pattern that is to be stored in the network, if inter
 
 \subsection*{Pattern Recognition}
 
-In order to emulate the brain's behaviour of recalling patterns from stimuli, Adachi’s Neural Network (AdNN) [5] was proposed. It was that shown that M-AdNN [1] is a truly chaotic neural network, which exhibits periodicity when the input pattern closely resembles one of the stored states. The M-AdNN prevents being attracted to a local minima of the energy function by remaining in a chaotic state when the input pattern does not resonate with any of the stored patterns.
+In order to emulate the brain's behavior of recalling patterns from stimuli, Adachi’s Neural Network (AdNN) [5] was proposed. It was that shown that M-AdNN [1] is a truly chaotic neural network, which exhibits periodicity when the input pattern closely resembles one of the stored states. The M-AdNN prevents being attracted to a local minima of the energy function by remaining in a chaotic state when the input pattern does not resonate with any of the stored patterns.
 
 The M-AdNN updates the input pattern $y$ using the rule,
 
@@ -89,11 +89,11 @@ $$
 
 $J_{ij}^1(t) = \frac{\partial \eta_i(t+1)}{\partial \eta_j(t)}, J_{ij}^2(t) = \frac{\partial \eta_i(t+1)}{\partial \xi_j(t)}, J_{ij}^3(t) = \frac{\partial \xi_i(t+1)}{\partial \eta_j(t)}, J_{ij}^4(t) = \frac{\partial \xi_i(t+1)}{\partial \xi_j(t)}$
 
-The lyapunov exponents of the system are given by the natural logarithm of the eigenvalues of the matrix $\Lambda_A := [J(A)J(A)^T]^{\frac{1}{2}}$, which are discovered to be ${\frac{1}{2}}ln(N) + ln(k_f)$ and ${\frac{1}{2}}ln(N) + ln(k_r)$, and the rest of the lyapunov exponents being $-\infty$. Therefore, if either of the finite lyapunov are positive, the system exhibits chaotic behaviour. Although, it appears that $k_f$ and $k_r$ determine the behaviour of the system, it is also discovered that $\alpha$ also plays an important role as a bifurcation parameter [8]. As a system capable of pattern recognition, it can determined weather the M-AdNN has converged to a periodic orbit by studying computing the distance of the output from each of the stored patterns. The periodicity was measured to be the number of steps between each step where the output was observed to be close to the same stored pattern. After a few transient steps, it was observed that the inputs resonated with only one of the stored pattern. Although possible that the output can resonate with another stored pattern, the authors argued that they did not observe such behaviour in the 1000 iterations that they ran. If it were the case that there was another attractor, its periodicity would be orders of magnitude higher than the relatively lower periodicity observed for the trained pattern initially. In such case, the input pattern is classified as the stored pattern with lower periodicity.
+The Lyapunov exponents of the system are given by the natural logarithm of the eigenvalues of the matrix $\Lambda_A := [J(A)J(A)^T]^{\frac{1}{2}}$, which are discovered to be ${\frac{1}{2}}ln(N) + ln(k_f)$ and ${\frac{1}{2}}ln(N) + ln(k_r)$, and the rest of the Lyapunov exponents being $-\infty$. Therefore, if either of the finite Lyapunov are positive, the system exhibits chaotic behavior. Although, it appears that $k_f$ and $k_r$ determine the behavior of the system, it is also discovered that $\alpha$ also plays an important role as a bifurcation parameter [8]. As a system capable of pattern recognition, it can determined weather the M-AdNN has converged to a periodic orbit by studying computing the distance of the output from each of the stored patterns. The periodicity was measured to be the number of steps between each step where the output was observed to be close to the same stored pattern. After a few transient steps, it was observed that the inputs resonated with only one of the stored pattern. Although possible that the output can resonate with another stored pattern, the authors argued that they did not observe such behavior in the 1000 iterations that they ran. If it were the case that there was another attractor, its periodicity would be orders of magnitude higher than the relatively lower periodicity observed for the trained pattern initially. In such case, the input pattern is classified as the stored pattern with lower periodicity.
 
 
 \subsection*{Cryptography}
-We begin by considering [7] which discusses the following discrete hopfield neural network of two neurons with two delays and two decays.
+We begin by considering [7] which discusses the following discrete Hopfield neural network of two neurons with two delays and two decays.
 \begin{equation}\label{hopfield network}
     \begin{cases}
     x_{n+1} = a_{1}x_{n} + T_{12}g_{2}(y_{n - k_{2}})\\
@@ -144,7 +144,7 @@ In the Paper the authors discuss the Approximately random histogram distribution
 \subsubsection*{Differential Attack ( "difference from original" attack) }
 By checking the gradient of pixels of the original image to surrounding pixels in the ciphered image, it is shown that for the case used by the authors, there was a more than 98\% difference between the original pixel and the cipher pixels. Showing the System to be strong against differential attack as well in this instance.
 \subsubsection*{Security Key Analysis}
-The Hopfield network is considered to have highly sensitive keys with respect to it's initial condition. The Authors also note, that a secure cryptosystem requires a large key space. Using the example (3) we note that the available combination of initial conditions and activation functions,  can be considered infinitely large, and therefore has secure keys
+The Hopfield network is considered to have highly sensitive keys with respect to it's initial condition. The Authors also note, that a secure crypto-system requires a large key space. Using the example (3) we note that the available combination of initial conditions and activation functions,  can be considered infinitely large, and therefore has secure keys
 
 
 \section*{Conclusion}
